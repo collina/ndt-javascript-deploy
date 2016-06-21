@@ -1,0 +1,115 @@
+
+
+<!-- Intro -->
+<section id="intro" class="wrapper style1 fullscreen">
+  <div class="features">
+    <section>
+      <h1>Test Your Speed</h1>
+      <!-- <p>M-Lab</p> -->
+      <table class="transparent">
+        <tbody>
+        <tr>
+          <td><i class="fa fa-server" aria-hidden="true"></i></td>
+          <td>Test Server</td>
+          <td>{{ location }}</td>
+        </tr>
+        </tbody>
+      </table>
+      <ul class="actions">
+        <li><a class="button special" ng-click="startTest()" ng-class="startButton">Start <i class="fa fa-play-circle-o" aria-hidden="true"></i></a></li>
+      </ul>
+      <small>For more on M-Lab's data collection and measurement, including the disclosure of IP addresses, see our <a href="http://html5up.net/license">Privacy Policy</a>.</small>
+    </section>
+    <section>
+      <div class="progress-bar" ng-show="!measurementComplete">
+  	    <!-- <canvas id="inactiveProgress" class="progress-inactive" height="275px" width="275px"></canvas> -->
+        <canvas id="activeProgress" class="progress-active"  height="275px" width="275px"></canvas>
+        <div class="progress-label">
+          <h2>{{ currentSpeed }}</h2>
+          <h4>{{ currentPhase }}</h4>
+        </div>
+      </div>
+      <table class="alt" ng-show="measurementComplete">
+				<tbody>
+          <tr>
+            <td><i class="fa fa-download" aria-hidden="true"></i></td>
+						<td>Download</td>
+						<td><strong>{{ measurementResult.s2cRate }}</strong></td>
+					</tr>
+          <tr>
+            <td><i class="fa fa-upload" aria-hidden="true"></i></td>
+						<td>Upload</td>
+						<td><strong>{{ measurementResult.c2sRate }}</strong></td>
+					</tr>
+          <tr>
+            <td><i class="fa fa-hourglass-start" aria-hidden="true"></i></td>
+						<td>Latency</td>
+						<td><strong>{{ measurementResult.latency }}</strong></td>
+					</tr>
+          <tr>
+            <td><i class="fa fa-signal" aria-hidden="true"></i></td>
+						<td>Retransmission</td>
+						<td><strong>{{ measurementResult.loss }}</strong></td>
+					</tr>
+				</table>
+    </section>
+  </div>
+</section>
+
+<!-- Two -->
+<section id="about" class="wrapper style3">
+  <div class="inner">
+    <h2>About Measurement Lab</h2>
+    <p>Phasellus convallis elit id ullamcorper pulvinar. Duis aliquam turpis mauris, eu ultricies erat malesuada quis. Aliquam dapibus, lacus eget hendrerit bibendum, urna est aliquam sem, sit amet imperdiet est velit quis lorem.</p>
+    <div class="features">
+      <section>
+        <span class="icon major fa-code"></span>
+        <h3>Lorem ipsum amet</h3>
+        <p>Phasellus convallis elit id ullam corper amet et pulvinar. Duis aliquam turpis mauris, sed ultricies erat dapibus.</p>
+      </section>
+      <section>
+        <span class="icon major fa-lock"></span>
+        <h3>Aliquam sed nullam</h3>
+        <p>Phasellus convallis elit id ullam corper amet et pulvinar. Duis aliquam turpis mauris, sed ultricies erat dapibus.</p>
+      </section>
+      <section>
+        <span class="icon major fa-cog"></span>
+        <h3>Sed erat ullam corper</h3>
+        <p>Phasellus convallis elit id ullam corper amet et pulvinar. Duis aliquam turpis mauris, sed ultricies erat dapibus.</p>
+      </section>
+      <section>
+        <span class="icon major fa-desktop"></span>
+        <h3>Veroeros quis lorem</h3>
+        <p>Phasellus convallis elit id ullam corper amet et pulvinar. Duis aliquam turpis mauris, sed ultricies erat dapibus.</p>
+      </section>
+    </div>
+    <ul class="actions">
+      <li><a href="http://measurementlab.net" class="button">Learn more</a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- Three  fade-up -->
+<section id="contact" class="wrapper style1">
+  <div class="inner">
+    <h2>Get in touch</h2>
+    <p>Phasellus convallis elit id ullamcorper pulvinar. Duis aliquam turpis mauris, eu ultricies erat malesuada quis. Aliquam dapibus, lacus eget hendrerit bibendum, urna est aliquam sem, sit amet imperdiet est velit quis lorem.</p>
+    <div class="">
+      <section>
+        <ul class="contact">
+          <li>
+            <h3>Email</h3>
+            <a href="#">contact@measurementlab.net</a>
+          </li>
+          <li>
+            <h3>Social</h3>
+            <ul class="icons">
+              <li><a href="https://twitter.com/MeasurementLab" class="fa-twitter"><span class="label">Twitter</span></a></li>
+              <li><a href="https://github.com/m-lab" class="fa-github"><span class="label">GitHub</span></a></li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</section>
