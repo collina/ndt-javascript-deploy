@@ -1,6 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Lato:700);
 
 .progress-bar {
+  position: relative;
   display: inline-block;
   width: 275px;
   height: 275px;
@@ -12,10 +13,11 @@
   /*top: -279px;*/
 }
 .progress-bar .progress-label {
-  position: relative;
+  position: absolute;
   margin: 0;
   padding: 0;
-  top: -185px;
+  top: 105px;
+  width: 100%;
   text-align: center;
 }
 #progressControllerContainer {
