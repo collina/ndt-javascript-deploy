@@ -37,6 +37,15 @@ canvas.progressGauge {
 	padding: 0;
 	height: 200px;
 }
+
+#sidebar div.inner nav {
+	padding-top: 40px;
+	background-image: url('../images/mlab-logo-alt.png');
+	background-size: 160px;
+	background-repeat: no-repeat;
+	background-position: top right;
+
+}
 /*
 	Hyperspace by HTML5 UP
 	html5up.net | @ajlkn
@@ -3588,10 +3597,6 @@ canvas.progressGauge {
 	}
 
 		#sidebar > .inner {
-			background-image: url('../images/mlab-logo-alt.png');
-			background-repeat: no-repeat;
-			background-size: 100%;
-			/*background-position: right;*/
 			display: -moz-flex;
 			display: -webkit-flex;
 			display: -ms-flex;

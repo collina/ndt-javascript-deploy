@@ -1,7 +1,3 @@
-if (typeof simulate === 'undefined') {
-  var simulate = false;
-}
-
 var allowDebug = true;
 // CONSTANTS
 
@@ -22,54 +18,19 @@ var currentPhase = PHASE_LOADING;
 var currentPage = 'welcome';
 var transitionSpeed = 400;
 
-// A front-end implementation could define some specific server. If not, then
-// just use the current server's hostname.
-
-if (typeof window.ndtServer === 'undefined') {
-  var ndtServer = location.hostname;
-}
-
 // Gauges used for showing download/upload speed
 var downloadGauge, uploadGauge;
 var gaugeUpdateInterval;
 var gaugeMaxValue = 1000;
 
-// PRIMARY METHODS
-
-function initializeTest() {
-  // Initialize gauges
-  initializeGauges();
-
-  // Initialize start buttons
-  $('.start.button').click(startTest);
-
-  $('body').removeClass('initializing');
-  $('body').addClass('ready');
-  //return showPage('results');
-  setPhase(PHASE_WELCOME);
-}
-
-function startTest(evt) {
+function startTest(fqdn) {
   // evt.stopPropagation();
   // evt.preventDefault();
-  createBackend();
-  if (!isPluginLoaded()) {
-    $('#warning-plugin').show();
-    return;
-  }
-  if (simulate) return simulateTest();
-  currentPhase = PHASE_WELCOME;
-  testNDT().run_test(ndtServer);
-  monitorTest();
-}
+  createBackend(fqdn);
 
-function simulateTest() {
-  setPhase(PHASE_RESULTS);
-  return;
-  setPhase(PHASE_PREPARING);
-  setTimeout(function(){ setPhase(PHASE_UPLOAD) }, 2000);
-  setTimeout(function(){ setPhase(PHASE_DOWNLOAD) }, 4000);
-  setTimeout(function(){ setPhase(PHASE_RESULTS) }, 6000);
+  currentPhase = PHASE_WELCOME;
+  testNDT().run_test(fqdn);
+  monitorTest();
 }
 
 function monitorTest() {
@@ -131,11 +92,6 @@ function setPhase(phase) {
       // uploadGauge.setValue(0);
       // downloadGauge.setValue(0);
       debug('PREPARING TEST');
-
-      $('#loading').show();
-      $('#upload').hide();
-      $('#download').hide();
-
       break;
 
     case PHASE_UPLOAD:
@@ -144,12 +100,6 @@ function setPhase(phase) {
 
       pcBuffSpdLimit = speedLimit();
       rtt = minRoundTrip();
-
-      if (isNaN(rtt)) {
-        $('#rttValue').html('n/a');
-      } else {
-        $('rttValue').html(printNumberValue(Math.round(rtt)) + ' ms');
-      }
 
       if (!isNaN(pcBuffSpdLimit)) {
         if (pcBuffSpdLimit > gaugeMaxValue) {
@@ -172,61 +122,21 @@ function setPhase(phase) {
         // });
       }
 
-      $('#loading').hide();
-      $('#upload').show();
-
       break;
 
     case PHASE_DOWNLOAD:
       debug('DOWNLOAD TEST');
-
-      $('#upload').hide();
-      $('#download').show();
       break;
 
     case PHASE_RESULTS:
       debug('SHOW RESULTS');
       debug('Testing complete');
-
-      printDownloadSpeed();
-      printUploadSpeed();
-      $('#latency').html(printNumberValue(Math.round(minRoundTrip())));
-
-      showPage('results');
       break;
 
     default:
       return false;
   }
   currentPhase = phase;
-}
-
-
-// PAGES
-
-function showPage(page, callback) {
-  debug('Show page: ' + page);
-  if (page == currentPage) {
-    if (callback !== undefined) callback();
-    return true;
-  }
-  if (currentPage !== undefined) {
-    $('#' + currentPage).fadeOut(transitionSpeed, function(){
-      $('#' + page).fadeIn(transitionSpeed, callback);
-    });
-  }
-  else {
-    debug('No current page');
-    $('#' + page).fadeIn(transitionSpeed, callback);
-  }
-  currentPage = page;
-}
-
-
-// RESULTS
-
-function showResultsSummary() {
-  showResultsPage('summary');
 }
 
 // GAUGE
@@ -285,40 +195,28 @@ function testError() {
 }
 
 function remoteServer() {
-  if (simulate) return '0.0.0.0';
   return testNDT().get_host();
 }
 
 function uploadSpeed(raw) {
-  if (simulate) return 0;
   var speed = testNDT().getNDTvar('ClientToServerSpeed');
   return raw ? speed : parseFloat(speed);
 }
 
 function downloadSpeed() {
-  if (simulate) return 0;
   return parseFloat(testNDT().getNDTvar('ServerToClientSpeed'));
 }
 
 function minRoundTrip() {
-  if (simulate) return 0;
   return parseFloat(testNDT().getNDTvar('MinRTT'));
 }
 
 function jitter() {
-  if (simulate) return 0;
   return parseFloat(testNDT().getNDTvar('Jitter'));
 }
 
 function speedLimit() {
-  if (simulate) return 0;
   return parseFloat(testNDT().get_PcBuffSpdLimit());
-}
-
-function printPacketLoss() {
-  var packetLoss = parseFloat(testNDT().getNDTvar('loss'));
-  packetLoss = (packetLoss*100).toFixed(2);
-  return packetLoss;
 }
 
 function getSpeedUnit(speedInKB) {
@@ -330,18 +228,6 @@ function getSpeedUnit(speedInKB) {
 function getJustfiedSpeed(speedInKB) {
   var e = Math.floor(Math.log(speedInKB) / Math.log(1000));
   return (speedInKB / Math.pow(1000, e)).toFixed(2);
-}
-
-function printDownloadSpeed() {
-  var downloadSpeedVal = downloadSpeed();
-  $('#download-speed').html(getJustfiedSpeed(downloadSpeedVal));
-  $('#download-speed-units').html(getSpeedUnit(downloadSpeedVal));
-}
-
-function printUploadSpeed() {
-  var uploadSpeedVal = uploadSpeed(false);
-  $('#upload-speed').html(getJustfiedSpeed(uploadSpeedVal));
-  $('#upload-speed-units').html(getSpeedUnit(uploadSpeedVal));
 }
 
 function readNDTvar(variable) {
@@ -356,15 +242,12 @@ function printNumberValue(value) {
 // BACKEND METHODS
 
 function useWebsocketAsBackend() {
-  $('#rtt').hide();
-  $('#rttValue').hide();
-
   use_websocket_client = true;
 }
 
-function createBackend() {
+function createBackend(fqdn) {
   if (use_websocket_client) {
-    websocket_client = new NDTWrapper(window.ndtServer.fqdn);
+    websocket_client = new NDTWrapper(fqdn);
   }
 }
 
@@ -382,26 +265,6 @@ function isPluginLoaded() {
     return true;
   } catch(e) {
     return false;
-  }
-}
-
-function checkInstalledPlugins() {
-  var hasWebsockets = false;
-
-  $('#warning-websocket').hide();
-
-  hasWebsockets = false;
-  try {
-    var ndt_js = new NDTjs();
-    if (ndt_js.checkBrowserSupport()) {
-      hasWebsockets = true;
-    }
-  } catch(e) {
-    hasWebsockets = false;
-  }
-
-  if (hasWebsockets) {
-    useWebsocketAsBackend();
   }
 }
 

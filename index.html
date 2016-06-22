@@ -10,7 +10,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="assets/css/main.css" />
-		<script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+		<link rel="stylesheet" href="assets/css/circular-progress-style.css" />
 	</head>
 	<body>
 
@@ -19,7 +19,7 @@
 			<div class="inner">
 				<nav>
 					<ul>
-						<li><a href="#intro">Measure</a></li>
+						<li><a href="#intro"  class="active">Measure</a></li>
 						<li><a href="#about">About</a></li>
 						<li><a href="#contact">Contact</a></li>
 					</ul>
@@ -34,19 +34,20 @@
 		<footer id="footer" class="wrapper style1-alt">
 			<div class="inner">
 				<ul class="menu">
-					<li>Measurement Lab</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					<li><a href="http://www.measurementlab.net/">Measurement Lab</a></li>
+					<li>Template: <a href="http://html5up.net">HTML5 UP</a></li>
+					<li><a href="http://www.measurementlab.net/privacy/">Privacy Policy</a></li>
 				</ul>
 			</div>
 		</footer>
 
 		<!-- Scripts -->
 
+		<script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 		<script src="bower_components/angular/angular.js"></script>
 	  <script src="bower_components/angular-route/angular-route.js"></script>
 	  <script src="bower_components/angular-gettext/dist/angular-gettext.min.js"></script>
 	  <script src="bower_components/jquery/dist/jquery.min.js"></script>
-		<script src="bower_components/bernii/gauge.js/dist/gauge.min.js"></script>
-		<script src="bower_components/angular-gaugejs/src/angular-gauge.js"></script>
 
 		<script src="assets/js/jquery.scrollex.min.js"></script>
 		<script src="assets/js/jquery.scrolly.min.js"></script>
@@ -61,10 +62,9 @@
 	  <script type="text/javascript" src="assets/translations/nl.js"></script>
 
 		<script src="measure/measure.js"></script>
+		<script src="services/gaugeService.js"></script>
 		<script src="services/mlabService.js"></script>
 	  <script src="app.js"></script>
-
-		<link rel="stylesheet" href="assets/css/circular-progress-style.css" />
 
 	</body>
 </html>
